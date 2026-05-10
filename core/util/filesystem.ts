@@ -224,6 +224,14 @@ class FileSystemIde implements IDE {
     return Promise.resolve();
   }
 
+  revealInExplorer(path: string): Promise<void> {
+    return Promise.resolve();
+  }
+
+  revealInOS(path: string): Promise<void> {
+    return Promise.resolve();
+  }
+
   openUrl(url: string): Promise<void> {
     return Promise.resolve();
   }

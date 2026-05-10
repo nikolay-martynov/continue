@@ -719,6 +719,12 @@ export class VsCodeMessenger {
     this.onWebviewOrCore("openFile", async (msg) => {
       return ide.openFile(msg.data.path);
     });
+    this.onWebviewOrCore("revealInExplorer", async (msg) => {
+      return ide.revealInExplorer(msg.data.path);
+    });
+    this.onWebviewOrCore("revealInOS", async (msg) => {
+      return ide.revealInOS(msg.data.path);
+    });
     this.onWebviewOrCore("runCommand", async (msg) => {
       await ide.runCommand(msg.data.command);
     });

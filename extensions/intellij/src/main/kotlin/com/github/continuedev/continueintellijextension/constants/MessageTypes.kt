@@ -13,6 +13,8 @@ class MessageTypes {
             "fileExists",
             "showVirtualFile",
             "openFile",
+            "revealInExplorer",
+            "revealInOS",
             "runCommand",
             "saveFile",
             "readFile",

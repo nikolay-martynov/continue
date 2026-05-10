@@ -5,6 +5,7 @@ const toolTemplateSchema = z.object({
   wouldLikeTo: z.string().optional(),
   isCurrently: z.string().optional(),
   hasAlready: z.string().optional(),
+  filePathArg: z.string().optional(),
 });
 
 const baseMcpServerSchema = z.object({

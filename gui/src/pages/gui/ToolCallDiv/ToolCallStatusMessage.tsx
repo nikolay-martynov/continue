@@ -1,6 +1,7 @@
 import { Tool, ToolCallState } from "core";
 import Mustache from "mustache";
 import { getStatusIntro } from "./utils";
+import { FilePathActions } from "./FilePathActions";
 
 interface ToolCallStatusMessageProps {
   tool: Tool | undefined;
@@ -51,12 +52,19 @@ export function ToolCallStatusMessage({
     }
   }
 
+  // Extract file path if filePathArg is configured and the arg is present
+  const filePath =
+    tool.filePathArg && toolCallState.parsedArgs?.[tool.filePathArg]
+      ? String(toolCallState.parsedArgs[tool.filePathArg])
+      : undefined;
+
   return (
     <div
       className="text-description line-clamp-4 min-w-0 break-words"
       data-testid="tool-call-title"
     >
       {`Continue ${intro} ${message}`}
+      {filePath && <FilePathActions filePath={filePath} />}
     </div>
   );
 }

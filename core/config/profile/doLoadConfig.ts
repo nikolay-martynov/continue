@@ -256,6 +256,7 @@ export default async function doLoadConfig(options: {
           wouldLikeTo: templates?.wouldLikeTo,
           isCurrently: templates?.isCurrently,
           hasAlready: templates?.hasAlready,
+          filePathArg: templates?.filePathArg,
         };
       });
       newConfig.tools.push(...serverTools);

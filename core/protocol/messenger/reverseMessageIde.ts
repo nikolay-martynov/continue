@@ -130,6 +130,14 @@ export class ReverseMessageIde {
       return this.ide.openFile(data.path);
     });
 
+    this.on("revealInExplorer", (data) => {
+      return this.ide.revealInExplorer(data.path);
+    });
+
+    this.on("revealInOS", (data) => {
+      return this.ide.revealInOS(data.path);
+    });
+
     this.on("runCommand", (data) => {
       return this.ide.runCommand(data.command);
     });

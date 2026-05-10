@@ -34,3 +34,20 @@ See git history for details (`git diff upstream/main`).
           isCurrently: 'copying "{{{ source }}}" to "{{{ destination }}}""'
           hasAlready: 'copied "{{{ source }}}" to "{{{ destination }}}""'
   ```
+
+- Let users easily open the file/directory being manipulated by an MCP tool.
+  When `filePathArg` is set in a tool's template config,
+  three action icons appear next to the path in the tool call status message:
+
+  - 📄 Open in editor (files only; directories fall back to reveal in explorer)
+  - 📂 Reveal in Explorer (files and directories)
+  - ↗️ Reveal in OS file manager (files and directories)
+    Configured alongside existing templates:
+
+  ```yaml
+  toolTemplates:
+    fast_read_file:
+      wouldLikeTo: 'read "{{{ path }}}"'
+      hasAlready: 'read "{{{ path }}}"'
+      filePathArg: path
+  ```

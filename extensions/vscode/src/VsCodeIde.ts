@@ -310,7 +310,34 @@ class VsCodeIde implements IDE {
   }
 
   async openFile(fileUri: string): Promise<void> {
-    await this.ideUtils.openFile(vscode.Uri.parse(fileUri));
+    const uri = fileUri.includes("://")
+      ? vscode.Uri.parse(fileUri)
+      : vscode.Uri.file(fileUri);
+    // Check if path is a directory — if so, reveal in explorer instead
+    try {
+      const stat = await vscode.workspace.fs.stat(uri);
+      if (stat.type === vscode.FileType.Directory) {
+        await vscode.commands.executeCommand("revealInExplorer", uri);
+        return;
+      }
+    } catch {
+      // stat failed, try opening anyway
+    }
+    await this.ideUtils.openFile(uri);
+  }
+
+  async revealInExplorer(path: string): Promise<void> {
+    const uri = path.includes("://")
+      ? vscode.Uri.parse(path)
+      : vscode.Uri.file(path);
+    await vscode.commands.executeCommand("revealInExplorer", uri);
+  }
+
+  async revealInOS(path: string): Promise<void> {
+    const uri = path.includes("://")
+      ? vscode.Uri.parse(path)
+      : vscode.Uri.file(path);
+    await vscode.commands.executeCommand("revealFileInOS", uri);
   }
 
   async showLines(

@@ -180,6 +180,14 @@ export class MessageIde implements IDE {
     await this.request("openFile", { path: fileUri });
   }
 
+  async revealInExplorer(path: string): Promise<void> {
+    await this.request("revealInExplorer", { path });
+  }
+
+  async revealInOS(path: string): Promise<void> {
+    await this.request("revealInOS", { path });
+  }
+
   async openUrl(url: string): Promise<void> {
     await this.request("openUrl", url);
   }

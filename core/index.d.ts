@@ -867,6 +867,10 @@ export interface IDE {
 
   openFile(path: string): Promise<void>;
 
+  revealInExplorer(path: string): Promise<void>;
+
+  revealInOS(path: string): Promise<void>;
+
   openUrl(url: string): Promise<void>;
 
   getExternalUri?(uri: string): Promise<string>;
@@ -1167,6 +1171,7 @@ export interface Tool {
     processedArgs?: Record<string, unknown>,
   ) => ToolPolicy;
   mcpMeta?: McpToolMeta;
+  filePathArg?: string;
 }
 
 /**
@@ -1404,6 +1409,7 @@ type ToolTemplates = {
   wouldLikeTo?: string;
   isCurrently?: string;
   hasAlready?: string;
+  filePathArg?: string;
 };
 
 type BaseInternalMCPOptions = {

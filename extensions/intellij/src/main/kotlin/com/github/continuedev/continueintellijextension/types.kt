@@ -195,6 +195,10 @@ interface IDE {
 
     suspend fun openFile(path: String)
 
+    suspend fun revealInExplorer(path: String)
+
+    suspend fun revealInOS(path: String)
+
     suspend fun openUrl(url: String)
 
     suspend fun runCommand(command: String, options: TerminalOptions?)

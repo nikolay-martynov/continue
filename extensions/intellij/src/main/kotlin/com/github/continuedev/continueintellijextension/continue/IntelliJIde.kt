@@ -274,6 +274,26 @@ class IntelliJIDE(
             fileUtils.openFile(path)
         }
 
+    override suspend fun revealInExplorer(path: String) {
+        // IntelliJ: select file in Project view
+        withContext(Dispatchers.EDT) {
+            val virtualFile = LocalFileSystem.getInstance().findFileByPath(path)
+            if (virtualFile != null) {
+                ProjectView.getInstance(project)?.select(virtualFile, virtualFile, false)
+            }
+        }
+    }
+
+    override suspend fun revealInOS(path: String) {
+        // IntelliJ: reveal in OS file manager
+        withContext(Dispatchers.IO) {
+            val file = java.io.File(path)
+            if (file.exists()) {
+                Desktop.open(file.parentFile)
+            }
+        }
+    }
+
     override suspend fun openUrl(url: String) {
         withContext(Dispatchers.IO) {
             BrowserUtil.browse(url)
