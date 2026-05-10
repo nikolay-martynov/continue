@@ -237,21 +237,27 @@ export default async function doLoadConfig(options: {
       });
     });
     if (server.status === "connected") {
-      const serverTools: Tool[] = server.tools.map((tool) => ({
-        displayTitle: server.name + " " + tool.name,
-        function: {
-          description: tool.description,
-          name: getMCPToolName(server, tool),
-          parameters: tool.inputSchema,
-        },
-        faviconUrl: server.faviconUrl,
-        readonly: false,
-        type: "function" as const,
-        uri: encodeMCPToolUri(server.id, tool.name),
-        group: server.name,
-        originalFunctionName: tool.name,
-        mcpMeta: tool._meta,
-      }));
+      const serverTools: Tool[] = server.tools.map((tool) => {
+        const templates = server.toolTemplates?.[tool.name];
+        return {
+          displayTitle: server.name + " " + tool.name,
+          function: {
+            description: tool.description,
+            name: getMCPToolName(server, tool),
+            parameters: tool.inputSchema,
+          },
+          faviconUrl: server.faviconUrl,
+          readonly: false,
+          type: "function" as const,
+          uri: encodeMCPToolUri(server.id, tool.name),
+          group: server.name,
+          originalFunctionName: tool.name,
+          mcpMeta: tool._meta,
+          wouldLikeTo: templates?.wouldLikeTo,
+          isCurrently: templates?.isCurrently,
+          hasAlready: templates?.hasAlready,
+        };
+      });
       newConfig.tools.push(...serverTools);
 
       // Fetch MCP prompt content during config load

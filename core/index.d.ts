@@ -1400,6 +1400,12 @@ export interface MCPTool {
   _meta?: Record<string, unknown> | undefined;
 }
 
+type ToolTemplates = {
+  wouldLikeTo?: string;
+  isCurrently?: string;
+  hasAlready?: string;
+};
+
 type BaseInternalMCPOptions = {
   id: string;
   name: string;
@@ -1407,6 +1413,7 @@ type BaseInternalMCPOptions = {
   timeout?: number;
   requestOptions?: RequestOptions;
   sourceFile?: string;
+  toolTemplates?: Record<string, ToolTemplates>;
 };
 
 export type InternalStdioMcpOptions = BaseInternalMCPOptions & {

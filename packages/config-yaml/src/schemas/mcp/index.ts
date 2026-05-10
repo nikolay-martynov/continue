@@ -1,6 +1,12 @@
 import z from "zod";
 import { requestOptionsSchema } from "../../schemas/models.js";
 
+const toolTemplateSchema = z.object({
+  wouldLikeTo: z.string().optional(),
+  isCurrently: z.string().optional(),
+  hasAlready: z.string().optional(),
+});
+
 const baseMcpServerSchema = z.object({
   name: z.string(),
   serverName: z.string().optional(),
@@ -8,6 +14,7 @@ const baseMcpServerSchema = z.object({
   sourceFile: z.string().optional(), // Added during loading
   sourceSlug: z.string().optional(), // Added during loading
   connectionTimeout: z.number().gt(0).optional(),
+  toolTemplates: z.record(z.string(), toolTemplateSchema).optional(),
 });
 
 const stdioMcpServerSchema = baseMcpServerSchema.extend({
