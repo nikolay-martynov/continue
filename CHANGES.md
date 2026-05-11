@@ -51,3 +51,9 @@ See git history for details (`git diff upstream/main`).
       hasAlready: 'read "{{{ path }}}"'
       filePathArg: path
   ```
+
+- Clean up stale `yaml.schemas` entries from previous Continue extension versions.
+  On activation, the extension now removes schema entries containing "continue"
+  in their key (except the current version's path) before adding the new one.
+  Previously, old entries accumulated indefinitely because the code only appended
+  and never removed, causing "Unable to load schema" errors for uninstalled versions.

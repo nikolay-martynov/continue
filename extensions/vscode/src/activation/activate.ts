@@ -66,11 +66,20 @@ export async function activateExtension(context: vscode.ExtensionContext) {
     "config-yaml-schema.json",
   ).toString();
 
+  // Remove stale entries from previous Continue extension versions
+  const cleanedSchemas: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(yamlSchemas)) {
+    // Keep entries that are NOT from Continue extensions (or are the current one)
+    if (!key.includes("continue") || key === newPath) {
+      cleanedSchemas[key] = value;
+    }
+  }
+
   try {
     await yamlConfig.update(
       "schemas",
       {
-        ...yamlSchemas,
+        ...cleanedSchemas,
         [newPath]: [yamlMatcher],
       },
       vscode.ConfigurationTarget.Global,
