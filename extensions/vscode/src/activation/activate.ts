@@ -76,6 +76,7 @@ export async function activateExtension(context: vscode.ExtensionContext) {
   }
 
   try {
+    // Clean Global settings
     await yamlConfig.update(
       "schemas",
       {
@@ -84,6 +85,25 @@ export async function activateExtension(context: vscode.ExtensionContext) {
       },
       vscode.ConfigurationTarget.Global,
     );
+
+    // Clean Workspace settings (stale entries can also accumulate there)
+    const workspaceSchemas = yamlConfig.inspect<object>("schemas")?.workspaceValue;
+    if (workspaceSchemas && typeof workspaceSchemas === "object") {
+      const cleanedWorkspaceSchemas: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(workspaceSchemas)) {
+        if (!key.includes("continue") || key === newPath) {
+          cleanedWorkspaceSchemas[key] = value;
+        }
+      }
+      await yamlConfig.update(
+        "schemas",
+        {
+          ...cleanedWorkspaceSchemas,
+          [newPath]: [yamlMatcher],
+        },
+        vscode.ConfigurationTarget.Workspace,
+      );
+    }
   } catch (error) {
     console.error(
       "Failed to register Continue config.yaml schema, most likely, YAML extension is not installed",

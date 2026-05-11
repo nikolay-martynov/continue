@@ -57,3 +57,5 @@ See git history for details (`git diff upstream/main`).
   in their key (except the current version's path) before adding the new one.
   Previously, old entries accumulated indefinitely because the code only appended
   and never removed, causing "Unable to load schema" errors for uninstalled versions.
+- Also clean stale `yaml.schemas` entries from Workspace-level settings
+  (e.g. `.code-workspace` files), not just Global settings.
