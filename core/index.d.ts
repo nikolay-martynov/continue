@@ -667,7 +667,6 @@ export interface LLMOptions {
   apiKeyLocation?: string;
   envSecretLocations?: Record<string, string>;
   apiBase?: string;
-  orgScopeId?: string | null;
 
   onPremProxyUrl?: string | null;
 
@@ -1033,7 +1032,6 @@ export type ContextProviderName =
   | "currentFile"
   | "greptile"
   | "outline"
-  | "continue-proxy"
   | "highlights"
   | "file"
   | "issue"
@@ -1193,7 +1191,6 @@ interface ToolChoice {
 export interface ConfigDependentToolParams {
   rules: RuleWithSource[];
   enableExperimentalTools: boolean;
-  isSignedIn: boolean;
   isRemote: boolean;
   modelName: string | undefined;
   ide: IDE;
@@ -1241,7 +1238,6 @@ export interface ModelDescription {
   apiBase?: string;
   apiKeyLocation?: string;
   envSecretLocations?: Record<string, string>;
-  orgScopeId?: string | null;
 
   onPremProxyUrl?: string | null;
 
@@ -1375,9 +1371,6 @@ export interface MCPPrompt {
   description?: string;
   arguments?: MCPPromptArgs;
 }
-
-// Leaving here to ideate on
-// export type ContinueConfigSource = "local-yaml" | "local-json" | "hub-assistant" | "hub"
 
 // https://modelcontextprotocol.io/docs/concepts/resources#direct-resources
 export interface MCPResource {
@@ -1877,7 +1870,6 @@ export interface BrowserSerializedContinueConfig {
   tools: Omit<Tool, "preprocessArgs", "evaluateToolCallPolicy">[];
   mcpServerStatuses: MCPServerStatus[];
   rules: RuleWithSource[];
-  usePlatform: boolean;
   tabAutocompleteOptions?: Partial<TabAutocompleteOptions>;
   modelsByRole: Record<ModelRole, ModelDescription[]>;
   selectedModelByRole: Record<ModelRole, ModelDescription | null>;

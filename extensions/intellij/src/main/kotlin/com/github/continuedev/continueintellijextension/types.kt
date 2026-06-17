@@ -128,16 +128,6 @@ data class DocumentSymbol(
     val selectionRange: Range
 )
 
-data class ControlPlaneSessionInfo(
-    val accessToken: String,
-    val account: Account
-)
-
-data class Account(
-    val label: String,
-    val id: String
-)
-
 data class FileStats(
     val lastModified: Long,
     val size: Long
@@ -194,10 +184,6 @@ interface IDE {
     suspend fun getContinueDir(): String
 
     suspend fun openFile(path: String)
-
-    suspend fun revealInExplorer(path: String)
-
-    suspend fun revealInOS(path: String)
 
     suspend fun openUrl(url: String)
 

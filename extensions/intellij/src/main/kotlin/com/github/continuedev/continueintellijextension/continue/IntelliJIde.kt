@@ -4,7 +4,6 @@ import com.github.continuedev.continueintellijextension.*
 import com.github.continuedev.continueintellijextension.constants.ContinueConstants
 import com.github.continuedev.continueintellijextension.constants.getContinueGlobalPath
 import com.github.continuedev.continueintellijextension.`continue`.file.FileUtils
-import com.github.continuedev.continueintellijextension.error.ContinueSentryService
 import com.github.continuedev.continueintellijextension.services.ContinueExtensionSettings
 import com.github.continuedev.continueintellijextension.services.ContinuePluginService
 import com.github.continuedev.continueintellijextension.utils.*
@@ -274,26 +273,6 @@ class IntelliJIDE(
             fileUtils.openFile(path)
         }
 
-    override suspend fun revealInExplorer(path: String) {
-        // IntelliJ: select file in Project view
-        withContext(Dispatchers.EDT) {
-            val virtualFile = LocalFileSystem.getInstance().findFileByPath(path)
-            if (virtualFile != null) {
-                ProjectView.getInstance(project)?.select(virtualFile, virtualFile, false)
-            }
-        }
-    }
-
-    override suspend fun revealInOS(path: String) {
-        // IntelliJ: reveal in OS file manager
-        withContext(Dispatchers.IO) {
-            val file = java.io.File(path)
-            if (file.exists()) {
-                Desktop.open(file.parentFile)
-            }
-        }
-    }
-
     override suspend fun openUrl(url: String) {
         withContext(Dispatchers.IO) {
             BrowserUtil.browse(url)
@@ -468,7 +447,6 @@ class IntelliJIDE(
                 return results.split("\n")
             } catch (exception: Exception) {
                 val message = "Error executing ripgrep: ${exception.message}"
-                service<ContinueSentryService>().report(exception, message)
                 showToast(ToastType.ERROR, message)
                 return emptyList()
             }
@@ -515,7 +493,6 @@ class IntelliJIDE(
                 return ExecUtil.execAndGetOutput(command).stdout
             } catch (exception: Exception) {
                 val message = "Error executing ripgrep: ${exception.message}"
-                service<ContinueSentryService>().report(exception, message)
                 showToast(ToastType.ERROR, message)
                 return "Error: Unable to execute ripgrep command."
             }
