@@ -8,6 +8,25 @@ interface ToolCallStatusMessageProps {
   toolCallState: ToolCallState;
 }
 
+// Truncate long string values in parsedArgs so no single field dominates
+// the status line and all fields remain visible within the line clamp.
+const MAX_ARG_PREVIEW_LENGTH = 80;
+
+function truncateArgsForDisplay(
+  args: Record<string, unknown> | undefined,
+): Record<string, unknown> | undefined {
+  if (!args) return args;
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(args)) {
+    if (typeof value === "string" && value.length > MAX_ARG_PREVIEW_LENGTH) {
+      result[key] = value.slice(0, MAX_ARG_PREVIEW_LENGTH) + "\u2026";
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
 export function ToolCallStatusMessage({
   tool,
   toolCallState,
@@ -17,8 +36,12 @@ export function ToolCallStatusMessage({
   const toolName = tool.displayTitle ?? tool.function.name;
   const defaultToolDescription = `${toolName} tool`;
 
+  // Truncate long field values so all template fields are visible in the
+  // status line, not just the first long one.
+  const displayArgs = truncateArgsForDisplay(toolCallState.parsedArgs);
+
   const futureMessage: string = tool.wouldLikeTo
-    ? Mustache.render(tool.wouldLikeTo, toolCallState.parsedArgs)
+    ? Mustache.render(tool.wouldLikeTo, displayArgs)
     : `use the ${defaultToolDescription}`;
   // TODO go back and replace arg string values and tool names with <code> tags
   // to make them more readable
@@ -32,7 +55,7 @@ export function ToolCallStatusMessage({
     (tool.isInstant && toolCallState.status === "calling")
   ) {
     message = tool.hasAlready
-      ? Mustache.render(tool.hasAlready, toolCallState.parsedArgs)
+      ? Mustache.render(tool.hasAlready, displayArgs)
       : `used the ${defaultToolDescription}`;
   } else {
     switch (toolCallState.status) {
@@ -44,7 +67,7 @@ export function ToolCallStatusMessage({
         break;
       case "calling":
         message = tool.isCurrently
-          ? Mustache.render(tool.isCurrently, toolCallState.parsedArgs)
+          ? Mustache.render(tool.isCurrently, displayArgs)
           : `calling the ${defaultToolDescription}`;
         break;
       default:
@@ -60,10 +83,12 @@ export function ToolCallStatusMessage({
 
   return (
     <div
-      className="text-description line-clamp-4 min-w-0 break-words"
+      className="text-description flex min-w-0 flex-row items-center gap-1"
       data-testid="tool-call-title"
     >
-      {`Continue ${intro} ${message}`}
+      <div className="line-clamp-4 min-w-0 break-words">
+        {`Continue ${intro} ${message}`}
+      </div>
       {filePath && <FilePathActions filePath={filePath} />}
     </div>
   );

@@ -59,3 +59,13 @@ See git history for details (`git diff upstream/main`).
   and never removed, causing "Unable to load schema" errors for uninstalled versions.
 - Also clean stale `yaml.schemas` entries from Workspace-level settings
   (e.g. `.code-workspace` files), not just Global settings.
+- Truncate long argument values in MCP tool status messages so no single field
+  dominates the line clamp and all template fields remain visible. String values
+  longer than 80 characters are truncated with an ellipsis ("...") before being
+  interpolated into the `wouldLikeTo`/`isCurrently`/`hasAlready` templates.
+  This is UI-only: the actual tool call still receives the full untruncated value.
+- Fix file path action icons (Open in editor / Reveal in Explorer / Reveal in OS)
+  being hidden when the tool status message text is long. Previously the icons
+  were rendered inside the `line-clamp-4` block and got clipped together with
+  the text. Now the text and icons are in separate flex children, and the icons
+  have `flex-shrink-0` so they always remain visible regardless of text length.

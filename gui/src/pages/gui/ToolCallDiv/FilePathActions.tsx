@@ -28,7 +28,7 @@ export function FilePathActions({ filePath }: FilePathActionsProps) {
 
   return (
     <span
-      className="ml-1 inline-flex items-center gap-0.5"
+      className="ml-1 inline-flex flex-shrink-0 items-center gap-0.5"
       onClick={(e) => e.stopPropagation()}
     >
       {/* Open in editor */}
